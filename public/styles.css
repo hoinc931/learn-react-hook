@@ -1,0 +1,101 @@
+.form-inline input{
+    max-width: 100%;
+    height: 40px;
+    /* margin-top: 40px; */
+    /* border: 1px solid red; */
+}
+
+
+/* cart */
+.article{
+    width: 300px;
+    height: 400px;
+    position: relative;
+    overflow: hidden;
+    margin: 20px;
+    display: block;
+}
+
+.article .imgbox{
+    width: 300px;
+    height: 100%;
+    object-fit: cover;
+    padding-left: -20px;
+}
+
+.article .imgbox img{
+    width: 300px;
+    /* object-fit: cover; */
+}
+.row>*{
+    padding-left: 0px;
+}
+
+.article .details{
+    position: absolute;
+    bottom: -25px;
+    left: 0;
+    width: 100%;
+    padding-left: 10px;
+    background: #fff;
+    transition: .5s;
+}
+
+.article .details:hover{
+    bottom: 0;
+}
+
+.details h2 a{
+    color: #000;
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+.details h2 a:hover{
+    color: #333;
+}
+
+.details .price {
+    color: #f00;
+    /* position: absolute; */
+    /* top: 1.5rem; */
+    /* right: 10px; */
+    font-size: 1rem;
+}
+/* dropdown menu */
+.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+}
+.card{
+    background-color: #fff;
+    overflow: hidden;
+}
+.card img{
+    min-height: 354px;
+}
+.card-body{
+    transition: .5s;
+    position: absolute;
+    bottom: -60px;
+    /* width: 100%; */
+    height: 150px;
+    background-color: #fff;
+}
+.card-body:hover{
+    bottom: 0;
+}
+.active1{
+    color: red;
+    border:1px solid red; 
+    font-weight: 400;
+}
+.active2{
+    color: white;
+    background-color: rgb(190, 190, 190);
+    /* border:1px solid red;  */
+    font-weight: 400;
+}
+.link-side-bar{
+    color: white;
+}
