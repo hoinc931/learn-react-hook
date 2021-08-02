@@ -20,6 +20,10 @@ const AuthApi = {
     remove(id){
         const url = `/removeuser/${id}`;
         return axiosClient.delete(url)
+    },
+    getUser(id){
+        const url = `/getuserbyid/${id}`;
+        return axiosClient.get(url)
     }
 }
 

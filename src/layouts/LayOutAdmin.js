@@ -1,16 +1,24 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
+import AuthApi from '../api/authApi'
 
 const LayOutAdmin = (props) => {
   if(!localStorage.getItem('token')){
     return (
-      <h1 className="text-danger text-center">Access Denied</h1>
+      <>
+        <h1 className="text-danger text-center">Access Denied</h1>
+        <Link to="/" className="d-block text-auto mx-auto">Trở lại an toàn.</Link>
+      </>
     )
   }else{
     const {user} = JSON.parse(localStorage.getItem('token'))
+    
     if(user.role !== 1){
       return (
-        <h1 className="text-danger text-center">Access Denied</h1>
+        <>
+          <h1 className="text-danger text-center">Access Denied</h1>
+          <Link to="/" className="d-block text-auto mx-auto">Trở lại an toàn.</Link>
+        </>
       )
     }else{
       return (
@@ -23,7 +31,7 @@ const LayOutAdmin = (props) => {
             <input className="form-control form-control-dark w-50" type="text" placeholder="Search" aria-label="Search" />
             <ul className="navbar-nav px-3">
               <li className="nav-item text-nowrap">
-                <NavLink className="nav-link" to="/signout">Sign out</NavLink>
+                <NavLink className="nav-link" to="/">Back Client</NavLink>
               </li>
             </ul>
           </header>
@@ -45,6 +53,11 @@ const LayOutAdmin = (props) => {
                     <li className="nav-item">
                       <NavLink className="nav-link link-side-bar text-dark" activeClassName="active2" to="/admin/listcategory">
                         Categories
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink className="nav-link link-side-bar text-dark" activeClassName="active2" to="/admin/contact">
+                        Contacts
                       </NavLink>
                     </li>
                     <li className="nav-item">

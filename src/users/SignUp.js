@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import AuthApi from '../api/authApi';
 // import { signUp } from './auth';
 
 const SignUp = () => {
+    const history = useHistory()
+    let user = localStorage.getItem('token')
+    if(user != undefined){
+        history.push('/')
+    }
+    window.scrollTo(0, 0);
+
     document.title = "MIX Clothes - Đăng ký tài khoản";
     const { register, handleSubmit, formState: {errors} } = useForm();
     const [error, setError] = useState("");
@@ -22,7 +29,6 @@ const SignUp = () => {
             setStatus(false)
         }
     }
-    
     // const onSubmit = async (data, e) => {
     //     signUp(data)
     //         .then(dataInput => {

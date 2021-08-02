@@ -46,6 +46,8 @@ const Contact = () => {
         </div>
     }
 
+    // const khac = document.querySelector('#khac');
+    // if(khac == )
     return (
         <div className="container contact mt-5">
             <div className="row">
@@ -66,6 +68,19 @@ const Contact = () => {
                                     <input type="text" className="form-control" id="name" placeholder="Nhập tiêu đề cần hỗ trợ" {...register('title')} />
                                 </div>
                             </div>
+                            {/* <div className="form-group">
+                                <label className="control-label" htmlFor="problem">Vấn đề cần hỗ trợ:</label>
+                                <div className="col-sm-10">          
+                                    <select className="form-control" {...register('problem')}>
+                                        <option value="0">Chọn vấn đề cần hỗ trợ</option>
+                                        <option>Về sản phẩm</option>
+                                        <option>Hỗ trợ khách hàng</option>
+                                        <option>Giao hàng</option>
+                                        <option id="khac">Khác: </option>
+
+                                    </select>
+                                </div>
+                            </div> */}
                             <div className="form-group">
                                 <label className="control-label" htmlFor="name">Họ và Tên:</label>
                                 <div className="col-sm-10">          

@@ -23,7 +23,7 @@ const CategoryDetail = () => {
     }, [idCate])
 
     let showProduct;
-    if(product == []){
+    if(product !== []){
         showProduct = product.map( (item, index) => {
             return (
                 <div className="col-4 pb-4" key={index}>
@@ -33,7 +33,7 @@ const CategoryDetail = () => {
                             <div className="card-body">
                                 <h5 className="card-title">{item.name}</h5>
                                 {/* <p className="card-text">Mo ta</p> */}
-                                <p className="text-danger">{item.price}</p>
+                                <p className="text-danger">{item.price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</p>
                                 
                             </div>
                         </Link>

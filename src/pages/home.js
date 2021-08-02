@@ -10,8 +10,8 @@ const HomePage = () => {
     useEffect(() => {
         try {
             const data = ProductApi.getListLimit8();
-            data.then( ({data : data}) => {
-                setProducts(data.data)
+            data.then( ({data : prods}) => {
+                setProducts(prods.data)
             })
         } catch (error) {
             console.log(error)
@@ -23,7 +23,7 @@ const HomePage = () => {
         <>
             <div>
                 <div className="banner">
-                    <img src="https://i.pinimg.com/originals/09/26/bb/0926bbd7c5fc3e767c37cb5a6970bfbc.jpg" className="w-100 shadow" style={{maxHeight: '600px'}} alt="" />
+                    <img src="http://vraimode.com/media/catalog/category/banner_3.jpg" className="w-100 shadow" style={{maxHeight: '600px'}} alt="" />
                 </div>
                 <div className="container">
                     <h2 className="text-center mt-4">Sản phẩm mới</h2>
@@ -38,8 +38,8 @@ const HomePage = () => {
                                                 <div className="card shadow h-100">
                                                     <img src={`http://localhost:4000/api/product/image/${item._id}`} className="card-img-top bd-placeholder-img" height="250px" style={{objectFit: 'cover'}} alt={item.name} />
                                                     <div className="card-body">
-                                                        <h5 className="card-title">{item.name}</h5>
-                                                        <p className="text-danger">{item.price}</p>
+                                                        <h6 className="fs-6">{item.name}</h6>
+                                                        <p className="text-danger">{item.price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</p>
                                                         <p>{item.size}</p>
                                                         <p>{item.color}</p>
                                                     </div>
@@ -54,7 +54,7 @@ const HomePage = () => {
                     </div>
                 </div>
                 <div className="banner h-5 pt-4 px-0">
-                    <img src="https://shopquangkhanh.com/wp-content/uploads/2019/08/banner-nike-adidas.jpg" className="w-100 h-50" style={{maxHeight: '400px'}} alt="" />
+                    <img src="https://www.cunsieupham.com/wp-content/uploads/2015/12/banner-clothes-cunsieupham.com_.png" className="w-100 h-50" style={{maxHeight: '400px'}} alt="" />
                     <div className="container">
                         <div className="row border pt-4 shadow-sm">
                             <div className="col-4 text-center border-end">
