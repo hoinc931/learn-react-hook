@@ -25,6 +25,9 @@ import ColorList from './pages/admin/products/ColorList';
 import AddColor from './pages/admin/products/AddColor';
 import SizeList from './pages/admin/products/SizeList';
 import AddSize from './pages/admin/products/AddSize';
+import ContactList from './pages/admin/Contact';
+import UserInfor from './pages/UserInfor';
+import Cart from './pages/Cart';
 
 
 const Routers = (props) => {
@@ -67,6 +70,9 @@ const Routers = (props) => {
                                 <Route exact path="/admin/listusers">
                                     <ListUser />
                                 </Route>
+                                <Route exact path="/admin/contact">
+                                    <ContactList />
+                                </Route>
                                 {/* UPDATE */}
                                 <Route exact path="/admin/category/update/:id">
                                     <UpdateCategory />
@@ -95,6 +101,9 @@ const Routers = (props) => {
                                 <Route exact path="/signin">
                                     <SignIn {...props} />
                                 </Route>
+                                <Route exact path="/userinfor">
+                                    <UserInfor />
+                                </Route>
                                 <Route exact path="/signup">
                                     <SignUp />
                                 </Route>
@@ -102,34 +111,19 @@ const Routers = (props) => {
                                     <CategoryDetail />
                                 </Route>
                                 <Route exact path="/product/:id">
-                                    <ProductDetail />
+                                    <ProductDetail {...props} />
+                                </Route>
+                                <Route exact path="/cart">
+                                    <Cart {...props} />
                                 </Route>
                                 <Route path="*">
                                     Error 404. Not Found Page
                                 </Route>
-                                
                             </Switch>
                         </LayOutWebsite>
                     </Route>
                 </Switch>
             </Router>
-
-
-            {/* <Router>
-                <Header />
-                <div>
-                    <Switch>
-                        <Route exact path="/">
-                            <Link to="/admin/add">Add</Link>
-                            <HomePage {...props} />
-                        </Route>
-                        <Route exact path="/about" component={AboutPage} />
-                        <Route exact path="/admin/add">
-                            <Add {...props} />
-                        </Route>
-                    </Switch>
-                </div>
-            </Router> */}
         </>
     )
 }

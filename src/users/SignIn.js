@@ -5,9 +5,13 @@ import { authenticate } from './auth';
 import AuthApi from '../api/authApi';
 
 const SignIn = (props) => {
+    const history = useHistory();
+    let user = localStorage.getItem('token')
+    if(user != null){
+        history.push('/')
+    }
     document.title = "MIX Clothes - Đăng nhập";
     const { register, handleSubmit, formState: {errors} } = useForm();
-    const history = useHistory();
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     
@@ -86,7 +90,36 @@ const SignIn = (props) => {
     }
     return (
         <div className="container w-50 pt-5">
-            {signInForm()}
+            {/* {signInForm()} */}
+            <form action="" onSubmit={handleSubmit(onSubmit)} method="post" encType="application/x-www-form-urlencoded">
+                <div className="text-center">
+                    <h2>Đăng nhập</h2>
+                    {showError()}
+                    {showLoading()}
+                </div>
+                <div className="form-group pt-3">
+                    <label htmlFor="email">Email: </label>
+                    <input type="email"
+                        id="email" 
+                        placeholder="Nhập email..." 
+                        className="form-control" 
+                        {...register('email')} />
+                </div>
+                <div className="form-group pt-3">
+                    <label htmlFor="password">Mật khẩu: </label>
+                    <input type="password"
+                        id="password" 
+                        placeholder="Nhập mật khẩu..." 
+                        className="form-control" 
+                        {...register('password')} />
+                </div>
+                <div className="text-center pt-3">
+                    Bạn chưa có tài khoản? <Link to="/signup">Tạo tài khoản mới.</Link>
+                </div>
+                <div className="text-center pt-3 pb-4">
+                    <button type="submit" id="signInBtn" className="btn btn-outline-primary">Đăng nhập</button>
+                </div>
+            </form>
         </div>
 
     )

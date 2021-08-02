@@ -16,6 +16,7 @@ const UpdateProduct = () => {
     const [categories, setCategories] = useState([])
     const [colors, setColors] = useState([])
     const [sizes, setSizes] = useState([])
+    
     const id = ParseURLAdmin(); //lấy id từ url
     useEffect(() => {
         try {
@@ -28,7 +29,7 @@ const UpdateProduct = () => {
                 setCategories(categories.categories)
             })
             let dataColor = ColorAPI.get()
-            dataColor.then( ({data: color}) => setColors(color))
+            dataColor.then( ({data: color}) => setColors(color.data))
             let dataSize = ColorAPI.getSize()
             dataSize.then( ({data: size}) => setSizes(size.data))
             
@@ -38,10 +39,13 @@ const UpdateProduct = () => {
     }, [id])
     const { register, handleSubmit, formState: {errors} } = useForm();
     const [error, setError] = useState("");
+    console.log(errors)
 
+    const {user, token} = JSON.parse(localStorage.getItem('token'))
     const update = (data) => {
-        return fetch(`${API}/productAdd/create`,{
-            method: "POST",
+        return fetch(`${API}/product/${id}/${user._id}`,{
+            headers: { 'Authorization': 'Bearer ' + token},
+            method: "PUT",
             body: data
         })
         .then(response => response.json())
@@ -49,34 +53,38 @@ const UpdateProduct = () => {
     }
 
     const onSubmit = (data, e) => {
-        console.log(data)
-        // if(data.category === "0"){
-        //     setError("Vui lòng chọn danh mục!");
-        //     setStatus(false)
-        // }else{
-        //     let addPro = new FormData();
-        //     addPro.append('name', data.name)
-        //     addPro.append('category', data.category)
-        //     // addPro.append('description', data.description)
-        //     addPro.append('detail', data.detail)
-        //     addPro.append('price', data.price)
-        //     // addPro.append('quantity', data.quantity)
-        //     addPro.append('image', data.image[0])
-        //     addPro.append('size', data.size)
-        //     addPro.append('color', data.color)
-    
-        //     update(addPro)
-        //         .then(output => {
-        //             if(output.error){
-        //                 setError(output.error )
-        //                 setStatus(false)
-        //             }else{
-        //                 e.target.reset()
-        //                 setError("");
-        //                 setStatus(true)
-        //             }
-        //         })
-        // }
+        let addPro = new FormData();
+        if(data.image[0] === undefined){
+            addPro.append('name', data.name)
+            addPro.append('category', data.category)
+            // addPro.append('description', data.description)
+            addPro.append('detail', data.detail)
+            addPro.append('price', data.price)
+            // addPro.append('quantity', data.quantity)
+            addPro.append('size', data.size)
+            addPro.append('color', data.color)
+        }else{
+            addPro.append('name', data.name)
+            addPro.append('category', data.category)
+            // addPro.append('description', data.description)
+            addPro.append('detail', data.detail)
+            addPro.append('price', data.price)
+            // addPro.append('quantity', data.quantity)
+            addPro.append('image', data.image[0])
+            addPro.append('size', data.size)
+            addPro.append('color', data.color)
+        }
+
+        update(addPro)
+            .then(output => {
+                if(output.error){
+                    setError(output.error )
+                }else{
+                    e.target.reset()
+                    setError("");
+                    history.push('/admin/listproducts')
+                }
+            })
     }
 
     const showError = () => {
@@ -84,9 +92,8 @@ const UpdateProduct = () => {
             ❌ {error}
         </div>
     }
-    if(product.size){
+    if(product.size && product.color){
         let sizeId = product.size[0].split(',')
-        //return string => split to an array => filter new array => map twice array
         let sized = []
         sizes.map( (item, index) => {
             return sizeId.map( items => { 
@@ -97,20 +104,47 @@ const UpdateProduct = () => {
                 }
             })
         })
-        let sizeUnChecked = [];
-        sizes.map( (item, index) => {
-            let a = []
-            return sizeId.map( items => { 
-                if(items != item._id){
-                    return sizeUnChecked = [...sizeUnChecked, item]
+        
+        let sizeUnChecked = sizes.map( (item, index) => {
+            let a = 0;
+            for( let i = 0; i < sizeId.length; i++){
+                if( item._id != sizeId[i]){
+                    a += 1
+                }
+            }
+            if(a == sizeId.length){
+                return item
+            }else{
+                return null
+            }
+        })
+
+        let colorId = product.color[0].split(',')
+        let colorChecked = []
+        colors.map( (item, index) => {
+            return colorId.map( items => { 
+                if(items == item._id){
+                    return colorChecked = [...colorChecked, item]
                 }else{
                     return ''
                 }
             })
         })
-        // console.log('size api', a)
-        // console.log('ceh', sized)
-        console.log(sizeUnChecked)
+        
+        let colorUnChecked = colors.map( (item, index) => {
+            let a = 0;
+            for( let i = 0; i < colorId.length; i++){
+                if( item._id != colorId[i]){
+                    a += 1
+                }
+            }
+            if(a == colorId.length){
+                return item
+            }else{
+                return null
+            }
+        })
+        
         return (
             <>
                 <form id="formId" action="" method="post" onSubmit={handleSubmit(onSubmit)} enctypr="application/x-www-form-urlencoded" className="pt-3">
@@ -151,11 +185,11 @@ const UpdateProduct = () => {
                         </div>
                         
                         <div className="form-group">
-                            <div className="d-flex my-2 size">
+                            <div className="d-flex my-2 row size">
                                 <label htmlFor="">Kích cỡ: </label>
                                 {sized.map( item => {
                                     if(item){
-                                        return <div className="form-check form-switch mx-3">
+                                        return <div className="form-check form-switch mx-3 col-2" key={item._id} >
                                                 <input className="form-check-input" type="checkbox" id={item._id} value={item._id} {...register('size')} defaultChecked />
                                                 <label className="form-check-label" htmlFor={item._id}>{item.name}</label>
                                             </div>
@@ -163,74 +197,49 @@ const UpdateProduct = () => {
                                         return ''
                                     }
                                 })}
-                                {/* {sizeUnChecked.map( item => {
-                                    if(item != ''){
-                                        return <div className="form-check form-switch mx-3">
+                                {sizeUnChecked.map( item => {
+                                    if(item != null){
+                                        return <div className="form-check form-switch mx-3 col-2" key={item._id} >
                                                 <input className="form-check-input" type="checkbox" id={item._id} value={item._id} {...register('size')} />
                                                 <label className="form-check-label" htmlFor={item._id}>{item.name}</label>
                                             </div>
                                     }else{
                                         return ''
                                     }
-                                })} */}
-                                {/* <div className="form-check form-switch mx-3">
-                                    <input className="form-check-input" type="checkbox" id="m" value="m" {...register('size')} defaultChecked />
-                                    <label className="form-check-label" htmlFor="m">M</label>
-                                </div>
-                                <div className="form-check form-switch mx-3">
-                                    <input className="form-check-input" type="checkbox" id="l" value="l" {...register('size')} defaultChecked />
-                                    <label className="form-check-label" htmlFor="l">L</label>
-                                </div>
-                                <div className="form-check form-switch mx-3">
-                                    <input className="form-check-input" type="checkbox" id="xl" value="xl" {...register('size')} defaultChecked />
-                                    <label className="form-check-label" htmlFor="xl">XL</label>
-                                </div>
-                                <div className="form-check form-switch mx-3">
-                                    <input className="form-check-input" type="checkbox" id="xxl" value="xxl" {...register('size')} defaultChecked />
-                                    <label className="form-check-label" htmlFor="xxl">XXL</label>
-                                </div> */}
+                                })}
+                                
                             </div>
-                            <div className="d-flex">
+                            <div className="d-flex row">
                                 <label htmlFor="">Màu: </label>
-                                <div className="form-check form-switch mx-3">
-                                    <input className="form-check-input" type="checkbox" id="black" value="black" {...register('color')} defaultChecked />
-                                    <label className="form-check-label" htmlFor="black">Đen</label>
-                                </div>
-                                <div className="form-check form-switch mx-3">
-                                    <input className="form-check-input" type="checkbox" id="white" value="white" {...register('color')} defaultChecked />
-                                    <label className="form-check-label" htmlFor="white">Trắng</label>
-                                </div>
-                                <div className="form-check form-switch mx-3">
-                                    <input className="form-check-input" type="checkbox" id="yellow" value="yellow" {...register('color')} defaultChecked />
-                                    <label className="form-check-label" htmlFor="yellow">Vàng</label>
-                                </div>
-                                <div className="form-check form-switch mx-3">
-                                    <input className="form-check-input" type="checkbox" id="red" value="red" {...register('color')} defaultChecked />
-                                    <label className="form-check-label" htmlFor="red">Đỏ</label>
-                                </div>
-                                <div className="form-check form-switch mx-3">
-                                    <input className="form-check-input" type="checkbox" id="green" value="green" {...register('color')} defaultChecked />
-                                    <label className="form-check-label" htmlFor="green">Xanh lá</label>
-                                </div>
-                                <div className="form-check form-switch mx-3">
-                                    <input className="form-check-input" type="checkbox" id="be" value="be" {...register('color')} defaultChecked />
-                                    <label className="form-check-label" htmlFor="be">Be</label>
-                                </div>
-                                <div className="form-check form-switch mx-3">
-                                    <input className="form-check-input" type="checkbox" id="pink" value="pink" {...register('color')} defaultChecked />
-                                    <label className="form-check-label" htmlFor="pink">Hồng</label>
-                                </div>
+                                {colorChecked.map( item => {
+                                    if(item){
+                                        return <div className="form-check form-switch mx-3 col-2" key={item._id} >
+                                                <input className="form-check-input" type="checkbox" id={item._id} value={item._id} {...register('color')} defaultChecked />
+                                                <label className="form-check-label" htmlFor={item._id}>{item.name}</label>
+                                            </div>
+                                    }
+                                })}
+                                {colorUnChecked.map( item => {
+                                    if(item != null){
+                                        return <div className="form-check form-switch mx-3 col-2" key={item._id} >
+                                                <input className="form-check-input" type="checkbox" id={item._id} value={item._id} {...register('color')} />
+                                                <label className="form-check-label" htmlFor={item._id}>{item.name}</label>
+                                            </div>
+                                    }else{
+                                        return ''
+                                    }
+                                })}
                             </div>
                         </div>
                         
                         <div className="form-group">
                             <label htmlFor="detail">Chi tiết: </label>
-                            <textarea id="detail" rows="5" className="form-control" {...register('detail')} ></textarea>
+                            <textarea id="detail" rows="5" defaultValue={product.detail} className="form-control" {...register('detail')} ></textarea>
                         </div>
                         
                     </div>
                     <div className="modal-footer">
-                        <Link to="/admin/listcategory"><button type="button" className="btn btn-secondary">Hủy</button></Link>
+                        <Link to="/admin/listproducts"><button type="button" className="btn btn-secondary">Hủy</button></Link>
                         <button type="submit" className="btn btn-primary" id="add">Thay đổi</button>
                     </div>
                 </form>

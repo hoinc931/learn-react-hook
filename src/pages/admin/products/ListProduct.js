@@ -104,7 +104,7 @@ const ListProduct = () => {
                     <td>{ item.name }</td>
                     <td>{cateName[0].name}</td>
                     <td><img src={url} alt="" style={{height: '120px'}}/></td>
-                    <td>{ item.price } VND</td>
+                    <td>{ item.price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'}) }</td>
                     <td>{ a.map(item => item[0].name ).join(', ') }</td>
                     <td>{ c.map(item => item[0].name ).join(', ') }</td>
                     <td>{ item.detail }</td>

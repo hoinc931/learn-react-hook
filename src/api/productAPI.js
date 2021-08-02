@@ -35,8 +35,11 @@ const ProductApi = {
         return axiosClient.post(url, product);
     },
     remove(id){
-        const url = `/product/${id}`;
-        return axiosClient.delete(url);
+        const {user, token} = JSON.parse(localStorage.getItem('token'))
+        const url = `/product/${id}/${user._id}`;
+        return axiosClient.delete(url, {
+            headers: { 'Authorization': 'Bearer ' + token}
+        });
     },
     // update(id, data){
     //     const url = `/product/${id}`;

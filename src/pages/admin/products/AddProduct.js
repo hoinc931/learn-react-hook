@@ -38,8 +38,10 @@ const AddProduct = () => {
     const [error, setError] = useState("");
     const [status, setStatus] = useState(false);
 
+    const {user, token} = JSON.parse(localStorage.getItem('token'))
     const create = (data) => {
-        return fetch(`${API}/productAdd/create`,{
+        return fetch(`${API}/productAdd/create/${user._id}`,{
+            headers: { 'Authorization': 'Bearer ' + token},
             method: "POST",
             body: data
         })
